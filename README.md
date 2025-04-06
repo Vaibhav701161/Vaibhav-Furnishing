@@ -1,6 +1,3 @@
-Awesome plan, Vaibhav! Let's refine and expand the **Vaibhav Furnishing Business Portal Implementation Plan** to use **HTML, CSS, and JavaScript only** (no database or backend for now). This version is great for **prototyping** the UI and flow without full-stack complexity.
-
----
 
 # 🧵 **Vaibhav Furnishing Business Portal: HTML, CSS & JS-Only Implementation Plan**
 
@@ -176,13 +173,3 @@ Host and polish the project for public access.
 
 ---
 
-## 🌟 Bonus: UI Design Notes
-
-- Use a consistent theme: subtle beige + maroon + white
-- Responsive layout for mobile devices
-- Use icons from [FontAwesome](https://fontawesome.com/)
-- Animation with `@keyframes` or `transition` for buttons/cards
-
----
-
-If you'd like, I can generate **boilerplate code for folder setup and sample HTML for each page** to get you started instantly! Just say the word 🔥
