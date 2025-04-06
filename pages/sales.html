@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Management - Vaibhav Furnishing</title>
+    <meta name="description" content="Sales management portal for Vaibhav Furnishing staff.">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Styles -->
+    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="../styles/sales.css">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Charts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="brand">
+                <h1 class="logo-text">Vaibhav Furnishing</h1>
+                <p class="tagline">Sales Portal</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="home.html" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="admin.html" class="nav-link">
+                    <i class="fas fa-box"></i>
+                    <span>Products</span>
+                </a>
+                <a href="sales.html" class="nav-link active">
+                    <i class="fas fa-tags"></i>
+                    <span>Sales</span>
+                </a>
+                <a href="shop.html" class="nav-link">
+                    <i class="fas fa-store"></i>
+                    <span>Shop</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Navigation -->
+            <nav class="top-nav">
+                <div class="page-header">
+                    <h2>Sales Management</h2>
+                    <p class="subtitle" id="current-date">Create new sale with discount validation</p>
+                </div>
+                <div class="user-menu">
+                    <div class="date-range-selector">
+                        <select id="date-range">
+                            <option value="today">Today</option>
+                            <option value="yesterday">Yesterday</option>
+                            <option value="week" selected>This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="quarter">This Quarter</option>
+                            <option value="year">This Year</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+                    <button class="notifications">
+                        <i class="fas fa-bell"></i>
+                        <span class="badge">2</span>
+                    </button>
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Sales+Staff&background=4a90e2&color=fff" alt="Sales Staff">
+                        <span>Sales Staff</span>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+                <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+                <button class="tab-btn" data-tab="new-sale">New Sale</button>
+                <button class="tab-btn" data-tab="transactions">Transactions</button>
+                <button class="tab-btn" data-tab="performance">Product Performance</button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Dashboard Tab -->
+                <div class="tab-pane active" id="dashboard-tab">
+                    <div class="stats-cards">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Total Sales</h3>
+                                <p class="stat-value" id="total-sales-value">₹0.00</p>
+                                <p class="stat-change positive"><i class="fas fa-arrow-up"></i> <span id="total-sales-change">0%</span> vs previous period</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Orders</h3>
+                                <p class="stat-value" id="orders-count">0</p>
+                                <p class="stat-change positive"><i class="fas fa-arrow-up"></i> <span id="orders-change">0%</span> vs previous period</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Customers</h3>
+                                <p class="stat-value" id="customers-count">0</p>
+                                <p class="stat-change positive"><i class="fas fa-arrow-up"></i> <span id="customers-change">0%</span> vs previous period</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <div class="stat-details">
+                                <h3>Avg. Discount</h3>
+                                <p class="stat-value" id="avg-discount">0%</p>
+                                <p class="stat-change negative"><i class="fas fa-arrow-down"></i> <span id="discount-change">0%</span> vs previous period</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charts-container">
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Sales Trend</h3>
+                                <div class="chart-actions">
+                                    <button class="btn text" id="daily-btn">Daily</button>
+                                    <button class="btn text active" id="weekly-btn">Weekly</button>
+                                    <button class="btn text" id="monthly-btn">Monthly</button>
+                                </div>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="sales-trend-chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Top Products</h3>
+                                <select id="top-products-filter">
+                                    <option value="revenue">By Revenue</option>
+                                    <option value="quantity">By Quantity</option>
+                                </select>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="products-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-transactions">
+                        <div class="section-header">
+                            <h3>Recent Transactions</h3>
+                            <button class="btn text" id="view-all-transactions">View All</button>
+                        </div>
+                        <div class="transactions-table-container">
+                            <table class="transactions-table">
+                                <thead>
+                                    <tr>
+                                        <th>Bill No</th>
+                                        <th>Date</th>
+                                        <th>Customer</th>
+                                        <th>Product</th>
+                                        <th>Qty</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-transactions-body">
+                                    <!-- Transactions will be loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Sale Tab -->
+                <div class="tab-pane" id="new-sale-tab">
+                    <div class="sales-container">
+                        <div class="sales-form-container">
+                            <form id="sales-form" class="sales-form">
+                                <div class="form-group">
+                                    <label for="product-select">Select Product</label>
+                                    <select id="product-select" required>
+                                        <option value="">Choose a product...</option>
+                                    </select>
+                                </div>
+
+                                <div class="product-info hidden">
+                                    <div class="product-preview">
+                                        <img id="product-image" src="" alt="Product Image">
+                                        <div class="product-details">
+                                            <h3 id="product-name"></h3>
+                                            <p id="product-category"></p>
+                                            <div class="stock-info">
+                                                <span id="stock-status"></span>
+                                                <span id="stock-quantity"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="price-details">
+                                        <div class="form-group">
+                                            <label>MRP</label>
+                                            <div class="price" id="selling-price"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Minimum Price</label>
+                                            <div class="price" id="min-price"></div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="final-price">Final Price</label>
+                                            <input type="number" id="final-price" required step="0.01">
+                                            <div class="discount-info">
+                                                <span id="discount-percentage">0%</span> discount
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="quantity">Quantity</label>
+                                        <input type="number" id="quantity" required min="1" value="1">
+                                    </div>
+
+                                    <div class="customer-details">
+                                        <div class="form-group">
+                                            <label for="customer-name">Customer Name</label>
+                                            <input type="text" id="customer-name" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="customer-phone">Phone Number</label>
+                                            <input type="tel" id="customer-phone" required pattern="[0-9]{10}">
+                                        </div>
+                                    </div>
+
+                                    <div class="total-section">
+                                        <div class="total-row">
+                                            <span>Subtotal:</span>
+                                            <span id="subtotal">₹0.00</span>
+                                        </div>
+                                        <div class="total-row">
+                                            <span>Total Discount:</span>
+                                            <span id="total-discount">₹0.00</span>
+                                        </div>
+                                        <div class="total-row grand-total">
+                                            <span>Grand Total:</span>
+                                            <span id="grand-total">₹0.00</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn primary">
+                                            <i class="fas fa-check"></i>
+                                            Complete Sale
+                                        </button>
+                                        <button type="button" class="btn secondary" id="reset-btn">
+                                            <i class="fas fa-undo"></i>
+                                            Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Bill Preview -->
+                        <div class="bill-preview hidden" id="bill-preview">
+                            <div class="bill-header">
+                                <h3>Bill Preview</h3>
+                                <div class="bill-actions">
+                                    <button class="btn text" id="print-bill">
+                                        <i class="fas fa-print"></i>
+                                        Print
+                                    </button>
+                                    <button class="btn text" id="download-bill">
+                                        <i class="fas fa-download"></i>
+                                        Download
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="bill-content" id="bill-content">
+                                <!-- Bill content will be dynamically generated -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions Tab -->
+                <div class="tab-pane" id="transactions-tab">
+                    <div class="transactions-controls">
+                        <div class="search-filter">
+                            <div class="search-box">
+                                <input type="text" id="transactions-search" placeholder="Search by product, customer, bill no...">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <div class="filter-options">
+                                <div class="filter-group">
+                                    <label for="status-filter">Status:</label>
+                                    <select id="status-filter">
+                                        <option value="all">All</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="cancelled">Cancelled</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label for="date-filter">Date Range:</label>
+                                    <div class="date-inputs">
+                                        <input type="date" id="date-from">
+                                        <span>to</span>
+                                        <input type="date" id="date-to">
+                                    </div>
+                                </div>
+                                <button class="btn secondary" id="apply-filters">
+                                    <i class="fas fa-filter"></i>
+                                    Apply Filters
+                                </button>
+                                <button class="btn text" id="reset-filters">
+                                    <i class="fas fa-undo"></i>
+                                    Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="transactions-stats">
+                        <div class="transaction-stat">
+                            <h4>Total Transactions</h4>
+                            <p id="total-transactions-count">0</p>
+                        </div>
+                        <div class="transaction-stat">
+                            <h4>Total Revenue</h4>
+                            <p id="total-transactions-revenue">₹0.00</p>
+                        </div>
+                        <div class="transaction-stat">
+                            <h4>Average Order Value</h4>
+                            <p id="avg-order-value">₹0.00</p>
+                        </div>
+                    </div>
+
+                    <div class="transactions-table-container full">
+                        <table class="transactions-table">
+                            <thead>
+                                <tr>
+                                    <th>Bill No</th>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Product</th>
+                                    <th>Qty</th>
+                                    <th>MRP</th>
+                                    <th>Discount</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="all-transactions-body">
+                                <!-- Transactions will be loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="pagination">
+                        <button class="pagination-btn" id="prev-page" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div class="pagination-info">
+                            Page <span id="current-page">1</span> of <span id="total-pages">1</span>
+                        </div>
+                        <button class="pagination-btn" id="next-page" disabled>
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Product Performance Tab -->
+                <div class="tab-pane" id="performance-tab">
+                    <div class="performance-controls">
+                        <div class="performance-filter">
+                            <div class="filter-group">
+                                <label for="category-filter">Category:</label>
+                                <select id="category-filter">
+                                    <option value="all">All Categories</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="performance-date-range">Date Range:</label>
+                                <select id="performance-date-range">
+                                    <option value="week">This Week</option>
+                                    <option value="month" selected>This Month</option>
+                                    <option value="quarter">This Quarter</option>
+                                    <option value="year">This Year</option>
+                                </select>
+                            </div>
+                            <div class="filter-group">
+                                <label for="sort-by">Sort By:</label>
+                                <select id="sort-by">
+                                    <option value="revenue">Revenue</option>
+                                    <option value="quantity">Quantity</option>
+                                    <option value="discount">Discount %</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="performance-charts">
+                        <div class="chart-card full-width">
+                            <div class="chart-header">
+                                <h3>Revenue by Category</h3>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="category-chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Top Selling Products</h3>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="top-products-chart"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3>Discount Analysis</h3>
+                            </div>
+                            <div class="chart-body">
+                                <canvas id="discount-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="performance-table-container">
+                        <h3>Product Performance</h3>
+                        <table class="performance-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Category</th>
+                                    <th>Units Sold</th>
+                                    <th>Revenue</th>
+                                    <th>Avg. Price</th>
+                                    <th>Avg. Discount</th>
+                                    <th>Stock</th>
+                                    <th>Trend</th>
+                                </tr>
+                            </thead>
+                            <tbody id="performance-table-body">
+                                <!-- Product data will be loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container"></div>
+
+    <script src="../scripts/utils.js"></script>
+    <script src="../scripts/sales.js"></script>
+</body>
+</html>
