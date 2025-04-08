@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Furnishing Shop Management</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="brand">
+            <h1 id="shop-name"></h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" class="nav-link active" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#" class="nav-link" data-page="inventory"><i class="fas fa-boxes"></i> Inventory</a></li>
+                <li><a href="#" class="nav-link" data-page="sales"><i class="fas fa-shopping-cart"></i> Sales</a></li>
+                <li><a href="#" class="nav-link" data-page="showroom"><i class="fas fa-store"></i> Showroom</a></li>
+                <li><a href="#" class="nav-link" data-page="reports"><i class="fas fa-chart-line"></i> Reports</a></li>
+                <li><a href="#" id="refresh-all-btn" title="Refresh All Data"><i class="fas fa-sync-alt"></i></a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Page content will be loaded dynamically -->
+        <div id="page-content"></div>
+    </main>
+
+    <footer>
+        <p id="copyright-text"></p>
+    </footer>
+
+    <!-- Templates -->
+    <template id="dashboard-template">
+        <div class="dashboard-page">
+            <h2>Dashboard</h2>
+            <div class="summary-cards">
+                <div class="card">
+                    <h3>Today's Sales</h3>
+                    <p class="amount" id="today-sales">0</p>
+                </div>
+                <div class="card">
+                    <h3>This Week</h3>
+                    <p class="amount" id="weekly-sales">0</p>
+                </div>
+                <div class="card">
+                    <h3>This Month</h3>
+                    <p class="amount" id="monthly-sales">0</p>
+                </div>
+                <div class="card">
+                    <h3>This Year</h3>
+                    <p class="amount" id="yearly-sales">0</p>
+                </div>
+            </div>
+            
+            <div class="dashboard-sections">
+                <div class="recent-sales">
+                    <h3>Recent Sales</h3>
+                    <div class="table-container">
+                        <table id="recent-sales-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Customer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Recent sales will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="low-stock">
+                    <h3>Low Stock Items</h3>
+                    <div class="table-container">
+                        <table id="low-stock-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Category</th>
+                                    <th>Current Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Low stock items will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <template id="inventory-template">
+        <div class="inventory-page">
+            <div class="page-header">
+                <h2>Inventory Management</h2>
+                <button id="add-product-btn" class="primary-btn"><i class="fas fa-plus"></i> Add New Product</button>
+            </div>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="category-filter">Category:</label>
+                    <select id="category-filter">
+                        <option value="">All Categories</option>
+                        <!-- Categories will be loaded dynamically -->
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="price-min">Price Range:</label>
+                    <input type="number" id="price-min" placeholder="Min" min="0">
+                    <span>to</span>
+                    <input type="number" id="price-max" placeholder="Max" min="0">
+                </div>
+                
+                <div class="filter-group">
+                    <label for="stock-status">Stock:</label>
+                    <select id="stock-status">
+                        <option value="">All</option>
+                        <option value="in-stock">In Stock</option>
+                        <option value="low-stock">Low Stock</option>
+                        <option value="out-of-stock">Out of Stock</option>
+                    </select>
+                </div>
+                
+                <button id="apply-filters" class="secondary-btn">Apply Filters</button>
+                <button id="reset-filters" class="secondary-btn">Reset</button>
+            </div>
+            
+            <div class="table-container">
+                <table id="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>Product ID</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Quality/Type</th>
+                            <th>Stock</th>
+                            <th>Selling Price</th>
+                            <th>Purchase Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Inventory items will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <template id="add-product-template">
+        <div class="form-container add-product-form">
+            <h2>Add New Product</h2>
+            <form id="product-form">
+                <div class="form-group">
+                    <label for="product-name">Product Name:</label>
+                    <input type="text" id="product-name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-category">Category:</label>
+                    <select id="product-category" required>
+                        <option value="">Select Category</option>
+                        <!-- Categories will be loaded dynamically -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-quality">Quality/Type:</label>
+                    <input type="text" id="product-quality" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="product-stock">Stock Quantity:</label>
+                    <input type="number" id="product-stock" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="selling-price">Selling Price (<span class="currency-symbol"></span>):</label>
+                    <input type="number" id="selling-price" min="0" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="purchase-price">Purchase Price (<span class="currency-symbol"></span>):</label>
+                    <input type="number" id="purchase-price" min="0" step="0.01" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="primary-btn">Save Product</button>
+                    <button type="button" id="cancel-add-product" class="secondary-btn">Cancel</button>
+                    <button type="button" id="add-product-submit" class="primary-btn">Add Product</button>
+                </div>
+            </form>
+        </div>
+    </template>
+
+    <template id="sales-template">
+        <div class="sales-page">
+            <div class="page-header">
+                <h2>Sales Entry</h2>
+                <button id="new-sale-btn" class="primary-btn"><i class="fas fa-plus"></i> New Sale</button>
+            </div>
+            
+            <div class="table-container">
+                <table id="sales-table">
+                    <thead>
+                        <tr>
+                            <th>Sale ID</th>
+                            <th>Date</th>
+                            <th>Product</th>
+                            <th>Quantity</th>
+                            <th>Selling Price</th>
+                            <th>Total</th>
+                            <th>Customer Mobile</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Sales will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <template id="add-sale-template">
+        <div class="form-container add-sale-form">
+            <h2>Record New Sale</h2>
+            <form id="sale-form">
+                <div class="form-group">
+                    <label for="sale-product">Product:</label>
+                    <select id="sale-product" required>
+                        <option value="">Select Product</option>
+                        <!-- Products will be loaded here -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sale-quantity">Quantity:</label>
+                    <input type="number" id="sale-quantity" min="1" value="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sale-price">Selling Price (<span class="currency-symbol"></span>):</label>
+                    <input type="number" id="sale-price" min="0" step="0.01">
+                    <small>You can adjust the price for discounts</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sale-total">Total Amount (<span class="currency-symbol"></span>):</label>
+                    <input type="number" id="sale-total" min="0" step="0.01" readonly>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customer-mobile">Customer Mobile:</label>
+                    <input type="tel" id="customer-mobile" placeholder="10 digit mobile number" required>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="primary-btn">Complete Sale</button>
+                    <button type="button" id="cancel-add-sale" class="secondary-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </template>
+
+    <template id="showroom-template">
+        <div class="showroom-page">
+            <h2>Virtual Showroom</h2>
+            
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="showroom-category">Category:</label>
+                    <select id="showroom-category">
+                        <option value="">All Categories</option>
+                        <!-- Categories will be loaded dynamically -->
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="showroom-price-min">Price Range:</label>
+                    <input type="number" id="showroom-price-min" placeholder="Min" min="0">
+                    <span>to</span>
+                    <input type="number" id="showroom-price-max" placeholder="Max" min="0">
+                </div>
+                
+                <div class="filter-group">
+                    <label for="showroom-quality">Quality:</label>
+                    <select id="showroom-quality">
+                        <option value="">All Qualities</option>
+                        <!-- Qualities will be loaded dynamically -->
+                    </select>
+                </div>
+                
+                <button id="apply-showroom-filters" class="secondary-btn">Apply Filters</button>
+                <button id="reset-showroom-filters" class="secondary-btn">Reset</button>
+            </div>
+            
+            <div class="products-grid" id="showroom-products">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+    </template>
+
+    <template id="reports-template">
+        <div class="reports-page">
+            <h2>Sales Reports</h2>
+            
+            <div class="date-range">
+                <div class="form-group">
+                    <label for="start-date">Start Date:</label>
+                    <input type="date" id="start-date">
+                </div>
+                
+                <div class="form-group">
+                    <label for="end-date">End Date:</label>
+                    <input type="date" id="end-date">
+                </div>
+                
+                <button id="generate-report" class="primary-btn">Generate Report</button>
+                <button id="export-csv" class="secondary-btn"><i class="fas fa-download"></i> Export CSV</button>
+            </div>
+            
+            <div class="summary-cards">
+                <div class="card">
+                    <h3>Total Sales</h3>
+                    <p class="amount" id="report-total-sales">0</p>
+                </div>
+                <div class="card">
+                    <h3>Items Sold</h3>
+                    <p class="amount" id="report-items-sold">0</p>
+                </div>
+                <div class="card">
+                    <h3>Profit</h3>
+                    <p class="amount" id="report-profit">0</p>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table id="report-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                            <th>Selling Price</th>
+                            <th>Total</th>
+                            <th>Profit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Report data will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </template>
+
+    <!-- Modal Component -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/database.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/inventory.js"></script>
+    <script src="js/sales.js"></script>
+    <script src="js/showroom.js"></script>
+    <script src="js/reports.js"></script>
+</body>
+</html> 

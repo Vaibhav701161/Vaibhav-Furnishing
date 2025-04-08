@@ -1,0 +1,103 @@
+/**
+ * Theme definitions
+ * This file contains CSS variables for theming the application
+ */
+
+:root {
+    /* Main Colors */
+    --primary-color: #4a6da7;
+    --primary-color-light: #6988c1;
+    --primary-color-dark: #3a5a8f;
+    --accent-color: #f0f4ff;
+    
+    /* Grays */
+    --light-gray: #f5f5f5;
+    --mid-gray: #e0e0e0;
+    --dark-gray: #666666;
+    --text-color: #333333;
+    --bg-color: #f9f9f9;
+    
+    /* Status Colors */
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --danger-color: #f44336;
+    --danger-color-dark: #d32f2f;
+    --info-color: #2196F3;
+    
+    /* UI Elements */
+    --border-radius: 4px;
+    --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    --box-shadow-hover: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+    
+    /* Spacing */
+    --spacing-small: 0.5rem;
+    --spacing-medium: 1rem;
+    --spacing-large: 1.5rem;
+    --spacing-xlarge: 2rem;
+    
+    /* Fonts */
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-size-small: 0.9rem;
+    --font-size-normal: 1rem;
+    --font-size-medium: 1.1rem;
+    --font-size-large: 1.2rem;
+    --font-size-xlarge: 1.8rem;
+    
+    /* Form fields */
+    --input-padding: 0.6rem;
+    --input-border: 1px solid var(--mid-gray);
+    
+    /* Z-index layers */
+    --z-index-modal: 1000;
+    --z-index-toast: 1001;
+}
+
+/* Media query breakpoints */
+:root {
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+}
+
+/* Toast notification styles */
+.toast-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: var(--z-index-toast);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 300px;
+}
+
+.toast {
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    color: white;
+    opacity: 0;
+    transition: var(--transition);
+    box-shadow: var(--box-shadow);
+}
+
+.toast.show {
+    opacity: 1;
+}
+
+.toast-success {
+    background-color: var(--success-color);
+}
+
+.toast-error {
+    background-color: var(--danger-color);
+}
+
+.toast-warning {
+    background-color: var(--warning-color);
+}
+
+.toast-info {
+    background-color: var(--info-color);
+} 
